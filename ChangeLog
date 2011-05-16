@@ -1,3 +1,69 @@
+Tue May 17 08:04:26 2011  Martin Bosslet  <Martin.Bosslet@googlemail.com>
+
+	* ext/openssl/ossl_digest.c: Add documentation.
+
+Tue May 17 07:14:58 2011  Eric Hodel  <drbrain@segment7.net>
+
+	* lib/net/http.rb:  Improve documentation of proxy configuration
+	  methods.  Patch by Alf Mikula.  [Ruby 1.9 - Bug #4714]
+
+Tue May 17 07:09:01 2011  Eric Hodel  <drbrain@segment7.net>
+
+	* lib/net/pop.rb:  Improve documentation.  Patch by Vincent Batts.
+	  [Ruby 1.9 - Bug #4711]
+	* lib/net/telnet.rb:  ditto
+
+Tue May 17 07:00:41 2011  Eric Hodel  <drbrain@segment7.net>
+
+	* lib/net/http.rb:  Fix nodoc for Net::HTTP::version_1_1?.  Patch by
+	  Alf Mikula.  [Ruby 1.9 - Bug #4713]
+
+Tue May 17 06:56:26 2011  Eric Hodel  <drbrain@segment7.net>
+
+	* lib/optparse.rb:  Add link to make_switch to improve documentation.
+	  Patch by David Copeland.  [Ruby 1.9 - Bug #4708]
+
+Tue May 17 06:50:40 2011  Eric Hodel  <drbrain@segment7.net>
+
+	* lib/observer.rb:  Improve documentation.  Patch by David Copeland.
+	  [Ruby 1.9 - Bug #4707]
+
+Tue May 17 06:42:53 2011  Eric Hodel  <drbrain@segment7.net>
+
+	* lib/logger.rb:  Improve documentation.  Patch by David Copeland.
+	  [Ruby 1.9 - Bug #4706]
+
+Tue May 17 06:28:14 2011  Eric Hodel  <drbrain@segment7.net>
+
+	* lib/gserver.rb:  Improve documentation.  Patch by David Copeland.
+	  [Ruby 1.9 - Bug #4705]
+
+Tue May 17 06:21:15 2011  Eric Hodel  <drbrain@segment7.net>
+
+	* lib/cgi.rb: Add toplevel documentation to class CGI
+	* lib/cgi/session.rb: Add overview documentation to CGI::Cookie
+	* lib/cgi/html.rb:  Don't add CGI::TagMaker documentation to CGI.
+	  Patch by David Copeland.  [Ruby 1.9 - Bug #4704]
+	* lib/cgi/core.rb:  Clean up CGI documentation.  Patch by David
+	  Copeland.  [Ruby 1.9 - Bug #4704]
+	* lib/cgi/cookie.rb:  Clean up CGI::Cookie documentation.  Patch by
+	  David Copeland.  [Ruby 1.9 - Bug #4704]
+
+Tue May 17 05:52:30 2011  Eric Hodel  <drbrain@segment7.net>
+
+	* ext/digest: Improve documentation of Digest, Digest::HMAC and
+	  Digest::SHA2.  Patch by Pete Higgins.  [Ruby 1.9 - Bug #4702]
+
+Tue May 17 03:51:42 2011  Eric Hodel  <drbrain@segment7.net>
+
+	* lib/abbrev.rb:  Hide copyright and revision information from RDoc.
+	  Inspired by patch from David Copeland, bug #4703.
+
+Tue May 17 03:33:21 2011  Eric Hodel  <drbrain@segment7.net>
+
+	* lib/timeout.rb (module Timeout):  Hide internal constants.  Patch by
+	  Pete Higgins.  [Ruby 1.9 - Bug #4701]
+
 Mon May 16 11:21:09 2011  NAKAMURA Usaku  <usa@ruby-lang.org>
 
 	* configure.in, win32/Makefile.sub (RUBY_SO_NAME): add CPU as prefix

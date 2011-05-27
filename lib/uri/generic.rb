@@ -174,7 +174,7 @@ module URI
                    path, opaque,
                    query,
                    fragment,
-		   parser = DEFAULT_PARSER,
+                   parser = DEFAULT_PARSER,
                    arg_check = false)
       @scheme = nil
       @user = nil
@@ -1323,9 +1323,11 @@ module URI
       if rel.userinfo != oth.userinfo ||
           rel.host.to_s.downcase != oth.host.to_s.downcase ||
           rel.port != oth.port
-	if self.userinfo.nil? && self.host.nil?
-	  return self, self.dup
-	end
+
+        if self.userinfo.nil? && self.host.nil?
+          return self, self.dup
+        end
+
         rel.set_port(nil) if rel.port == oth.default_port
         return rel, rel
       end

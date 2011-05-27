@@ -70,8 +70,8 @@ static int rb_threadptr_dead(rb_thread_t *th);
 
 static void rb_check_deadlock(rb_vm_t *vm);
 
-static const VALUE eKillSignal = INT2FIX(0);
-static const VALUE eTerminateSignal = INT2FIX(1);
+#define eKillSignal INT2FIX(0)
+#define eTerminateSignal INT2FIX(1)
 static volatile int system_working = 1;
 
 #define closed_stream_error GET_VM()->special_exceptions[ruby_error_closed_stream]
@@ -2759,14 +2759,14 @@ int ppoll(struct pollfd *fds, nfds_t nfds,
 	    timeout_ms = -1;
 	else {
 	    tmp = ts->tv_sec * 1000;
-	    tmp2 = tv->tv_nsec / (1000 * 1000);
+	    tmp2 = ts->tv_nsec / (1000 * 1000);
 	    if (TIMET_MAX - tmp < tmp2)
 		timeout_ms = -1;
 	    else
 		timeout_ms = tmp + tmp2;
 	}
     } else
-	timeout = -1;
+	timeout_ms = -1;
 
     return poll(fds, nfds, timeout_ms);
 }
@@ -4694,6 +4694,7 @@ Init_Thread(void)
 
     rb_thread_create_timer_thread();
 
+    /* suppress warnings on cygwin, mingw and mswin.*/
     (void)native_mutex_trylock;
 }
 

@@ -1715,10 +1715,15 @@ fill_cbuf(rb_io_t *fptr, int ec_flags)
                     res = rb_econv_convert(fptr->readconv, NULL, NULL, &dp, de, 0);
                     fptr->cbuf.len += (int)(dp - ds);
                     rb_econv_check_error(fptr->readconv);
+		    break;
                 }
             }
         }
     }
+    if (cbuf_len0 != fptr->cbuf.len)
+	return MORE_CHAR_SUSPENDED;
+
+    return MORE_CHAR_FINISHED;
 }
 
 static VALUE
@@ -4418,10 +4423,12 @@ validate_enc_binmode(int *fmode_p, int ecflags, rb_encoding *enc, rb_encoding *e
 	fmode |= DEFAULT_TEXTMODE;
 	*fmode_p = fmode;
     }
+#if !DEFAULT_TEXTMODE
     else if (!(ecflags & ECONV_NEWLINE_DECORATOR_MASK)) {
 	fmode &= ~FMODE_TEXTMODE;
 	*fmode_p = fmode;
     }
+#endif
 }
 
 static void
@@ -4458,6 +4465,7 @@ rb_io_extract_modeenc(VALUE *vmode_p, VALUE *vperm_p, VALUE opthash,
     /* Set to defaults */
     rb_io_ext_int_to_encs(NULL, NULL, &enc, &enc2);
 
+  vmode_handle:
     if (NIL_P(vmode)) {
         fmode = FMODE_READABLE | DEFAULT_TEXTMODE;
         oflags = O_RDONLY;
@@ -4470,7 +4478,6 @@ rb_io_extract_modeenc(VALUE *vmode_p, VALUE *vperm_p, VALUE opthash,
     else {
         const char *p;
 
-      vmode_handle:
         SafeStringValue(vmode);
         p = StringValueCStr(vmode);
         fmode = rb_io_modestr_fmode(p);
@@ -10572,10 +10579,6 @@ Init_IO(void)
 #ifdef O_DIRECT
     /*  Try to minimize cache effects of the I/O to and from this file. */
     rb_file_const("DIRECT", INT2FIX(O_DIRECT));
-#endif
-#ifdef O_CLOEXEC
-    /* enable close-on-exec flag */
-    rb_file_const("CLOEXEC", INT2FIX(O_CLOEXEC)); /* Linux, POSIX-2008. */
 #endif
 
     sym_mode = ID2SYM(rb_intern("mode"));

@@ -318,10 +318,11 @@ Init_ossl_digest()
      * and verify that it is equal to that in the signature.
      *
      * Among the supported message digest algorithms are:
-     * * DSS, DSS1
+     * * SHA, SHA1, SHA224, SHA256, SHA384 and SHA512
      * * MD2, MD4, MDC2 and MD5
      * * RIPEMD160
-     * * SHA, SHA1, SHA224, SHA256, SHA384 and SHA512
+     * * DSS, DSS1 (Pseudo algorithms to be used for DSA signatures. DSS is
+     *   equal to SHA and DSS1 is equal to SHA1)
      *
      * For each of these algorithms, there is a sub-class of Digest that
      * can be instantiated as simply as e.g.
@@ -330,8 +331,8 @@ Init_ossl_digest()
      *
      * === Mapping between Digest class and sn/ln
      *
-     * The sn (short names) and ln (long names) are defined in 
-     * <openssl/object.h> and <openssl/obj_mac.h>. They are textual 
+     * The sn (short names) and ln (long names) are defined in
+     * <openssl/object.h> and <openssl/obj_mac.h>. They are textual
      * representations of ASN.1 OBJECT IDENTIFIERs. Each supported digest
      * algorithm has an OBJECT IDENTIFIER associated to it and those again
      * have short/long names assigned to them.

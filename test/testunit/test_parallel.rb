@@ -8,10 +8,6 @@ module TestParallel
 
   class TestParallelWorker < Test::Unit::TestCase
     def setup
-      if /mswin|mingw|cygwin/ =~ RUBY_PLATFORM
-        skip "parallel testing doesn't support Windows yet."
-      end
-
       i, @worker_in = IO.pipe
       @worker_out, o = IO.pipe
       @worker_pid = spawn(*@options[:ruby], PARALLEL_RB,
@@ -27,7 +23,10 @@ module TestParallel
             Process.waitpid(@worker_pid)
           end
         rescue IOError, Errno::EPIPE, Timeout::Error
-          Process.kill(:KILL, @worker_pid)
+          begin
+            Process.kill(:KILL, @worker_pid)
+          rescue Errno::ESRCH
+          end
         end
       end
     end
@@ -120,16 +119,10 @@ module TestParallel
   end
 
   class TestParallel < Test::Unit::TestCase
-    def setup
-      if /mswin|mingw|cygwin/ =~ RUBY_PLATFORM
-        skip "parallel testing doesn't support Windows yet."
-      end
-    end
-
     def spawn_runner(*opt_args)
       @test_out, o = IO.pipe
       @test_pid = spawn(*@options[:ruby], TESTS+"/runner.rb",
-                        "-j","t2",*opt_args, out: o, err: o)
+                        "-j","t1",*opt_args, out: o, err: o)
       o.close
     end
 
@@ -147,20 +140,26 @@ module TestParallel
       end
     end
 
-    #def test_childs
-    #end
+    def test_ignore_jzero
+      @test_out, o = IO.pipe
+      @test_pid = spawn(*@options[:ruby], TESTS+"/runner.rb",
+                        "-j","0", out: File::NULL, err: o)
+      o.close
+      timeout(10) {
+        assert_match(/Error: parameter of -j option should be greater than 0/,@test_out.read)
+      }
+    end
 
     def test_should_run_all_without_any_leaks
       spawn_runner
       buf = timeout(10){@test_out.read}
-      assert_match(/^\.*(\.SF\.*F|F\.*\.+SF)\.*$/,buf)
+      assert_match(/^[SF\.]{7}$/,buf)
     end
 
     def test_should_retry_failed_on_workers
       spawn_runner
       buf = timeout(10){@test_out.read}
       assert_match(/^Retrying\.+$/,buf)
-      assert_match(/^\.*SF\.*$/,buf)
     end
 
     def test_no_retry_option

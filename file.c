@@ -489,7 +489,7 @@ static VALUE
 rb_stat_rdev(VALUE self)
 {
 #ifdef HAVE_ST_RDEV
-    return ULONG2NUM(get_stat(self)->st_rdev);
+    return DEVT2NUM(get_stat(self)->st_rdev);
 #else
     return Qnil;
 #endif
@@ -510,8 +510,7 @@ static VALUE
 rb_stat_rdev_major(VALUE self)
 {
 #if defined(HAVE_ST_RDEV) && defined(major)
-    long rdev = get_stat(self)->st_rdev;
-    return ULONG2NUM(major(rdev));
+    return DEVT2NUM(major(get_stat(self)->st_rdev));
 #else
     return Qnil;
 #endif
@@ -532,8 +531,7 @@ static VALUE
 rb_stat_rdev_minor(VALUE self)
 {
 #if defined(HAVE_ST_RDEV) && defined(minor)
-    long rdev = get_stat(self)->st_rdev;
-    return ULONG2NUM(minor(rdev));
+    return DEVT2NUM(minor(get_stat(self)->st_rdev));
 #else
     return Qnil;
 #endif
@@ -5009,7 +5007,8 @@ path_check_0(VALUE path, int execpath)
 	    && !(p && execpath && (st.st_mode & S_ISVTX))
 #endif
 	    && !access(p0, W_OK)) {
-	    rb_warn("Insecure world writable dir %s in %sPATH, mode 0%o",
+	    rb_warn("Insecure world writable dir %s in %sPATH, mode 0%"
+		    PRI_MODET_PREFIX"o",
 		    p0, (execpath ? "" : "LOAD_"), st.st_mode);
 	    if (p) *p = '/';
 	    RB_GC_GUARD(path);
